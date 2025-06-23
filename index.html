@@ -1,0 +1,319 @@
+<!-- CODE BLOCKS AND PIN DIAGRAMS WILL CONTINUE BELOW -->
+
+<h1>🌐 Smart Rover & Weather Monitoring System</h1>
+
+<h2>🧾 Project Introduction</h2>
+<p>This project integrates a Smart Rover and an IoT-based Weather & Irrigation System. The rover uses ESP32 with obstacle avoidance, GPS tracking, SLAM path visualization, and real-time MPU6050 graphing. The weather system, based on ESP8266, monitors temperature, humidity, air pressure, rainfall, and soil moisture, and controls a 12V pump wirelessly using another ESP8266 as a relay controller.</p>
+
+<h2>🔩 Component List</h2>
+<ul>
+  <li>ESP32 (for Rover)</li>
+  <li>ESP8266 x2 (for Weather & Pump)</li>
+  <li>2 Gear Motors</li>
+  <li>L298N Motor Driver</li>
+  <li>MPU6050 Accelerometer/Gyroscope</li>
+  <li>Ultrasonic Sensor</li>
+  <li>IR Sensor</li>
+  <li>GPS NEO-7M Module</li>
+  <li>DHT11 Temperature & Humidity Sensor</li>
+  <li>BMP180 Pressure Sensor</li>
+  <li>Soil Moisture Sensor</li>
+  <li>Rain Sensor</li>
+  <li>Servo Motor (for soil sensor insertion)</li>
+  <li>Relay Module + 12V Water Pump</li>
+</ul>
+
+<h2>🔐 Login System</h2>
+<p>The website includes a login system to protect project details:</p>
+<ul>
+  <li><strong>Username:</strong> Rover</li>
+  <li><strong>Password:</strong> 87654321</li>
+</ul>
+<p>After login, users can access the rover & weather dashboards by entering the ESP IPs.</p>
+
+<h2>📝 Feedback Form (on Login Page)</h2>
+<p>The feedback form is located on the login page and allows anyone to submit feedback without logging in. All feedback is saved to browser local storage.</p>
+
+<h2>🔌 How to Connect the Hardware</h2>
+<h3>🚀 How to Upload the Code</h3>
+<ol>
+  <li>Open the Arduino IDE and select the appropriate board from <strong>Tools &gt; Board</strong> (ESP32 Dev Module or NodeMCU 1.0 for ESP8266).</li>
+  <li>Install the necessary libraries from the Library Manager (e.g., <code>Adafruit_MPU6050</code>, <code>DHT sensor library</code>, <code>Adafruit BMP085</code>, <code>TinyGPSPlus</code>, etc.).</li>
+  <li>Copy the respective code from this site using the <strong>Copy</strong> button above each block.</li>
+  <li>Paste the code into Arduino IDE and connect your board via USB.</li>
+  <li>Select the correct <strong>Port</strong> from <strong>Tools &gt; Port</strong> and click the <strong>Upload</strong> button.</li>
+</ol>
+
+<h3>🌐 How to Access Dashboards</h3>
+<ol>
+  <li>Ensure all 3 boards are powered and connected to WiFi SSID <strong>Sudip</strong> with password <strong>87654321</strong>.</li>
+  <li>Open the <strong>Serial Monitor</strong> at <strong>115200 baud</strong> right after uploading the code.</li>
+  <li>Note the local IP address shown for each ESP module:
+    <ul>
+      <li>ESP32 → Rover Dashboard (Control Node)</li>
+      <li>ESP8266 #1 → Weather & Soil Monitoring (Sensor Node)</li>
+      <li>ESP8266 #2 → Water Pump Control (Relay Node)</li>
+    </ul>
+  </li>
+  <li>Enter the IP addresses in the dashboard section on this webpage under <strong>Access Dashboards</strong> to open each control panel.</li>
+</ol>
+
+<ol>
+  <li>Connect each sensor/module to its respective ESP as per the pin diagrams below.</li>
+  <li>Flash the provided Arduino code to each board (ESP32, ESP8266 #1, ESP8266 #2).</li>
+  <li>Connect all boards to the same WiFi network: <strong>SSID: Sudip</strong>, <strong>Password: 87654321</strong>.</li>
+  <li>Open the Serial Monitor at <strong>115200 baud</strong> to get the local IP of each ESP.</li>
+  <li>Open the IP of ESP32 in the browser for the Rover dashboard and ESP8266 #1 for the Weather dashboard.</li>
+  <li>Insert the soil sensor manually using buttons on the dashboard. It will turn off when retracted.</li>
+</ol>
+
+<!-- Login/Feedback setup already integrated into full HTML -->
+
+<style>
+.copy-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: #444;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1;
+}
+.code-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+pre code {
+  display: block;
+  overflow-x: auto;
+  white-space: pre;
+  background: #1e1e1e;
+  color: #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  font-family: Consolas, monospace;
+}
+</style>
+<script>
+function addCopyButtons() {
+  const codeBlocks = document.querySelectorAll("pre code");
+  codeBlocks.forEach(block => {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("code-container");
+    const button = document.createElement("button");
+    button.innerText = "Copy";
+    button.classList.add("copy-btn");
+    button.addEventListener("click", () => {
+      navigator.clipboard.writeText(block.innerText);
+      button.innerText = "Copied!";
+      setTimeout(() => button.innerText = "Copy", 2000);
+    });
+    const pre = block.parentElement;
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(button);
+    wrapper.appendChild(pre);
+  });
+}
+document.addEventListener("DOMContentLoaded", addCopyButtons);
+</script>
+
+<h2>📌 ESP32 Rover Pin Diagram</h2>
+<table>
+  <tr><th>Component</th><th>ESP32 Pin</th></tr>
+  <tr><td>Left Motor IN1</td><td>16</td></tr>
+  <tr><td>Left Motor IN2</td><td>17</td></tr>
+  <tr><td>Right Motor IN3</td><td>18</td></tr>
+  <tr><td>Right Motor IN4</td><td>19</td></tr>
+  <tr><td>IR Sensor</td><td>27</td></tr>
+  <tr><td>Ultrasonic Trig</td><td>25</td></tr>
+  <tr><td>Ultrasonic Echo</td><td>26</td></tr>
+  <tr><td>GPS RX</td><td>34</td></tr>
+  <tr><td>GPS TX</td><td>35</td></tr>
+  <tr><td>I2C (MPU6050)</td><td>SDA=SDA, SCL=SCL</td></tr>
+</table>
+
+<h2>📌 ESP8266 #1 (Weather + Soil Sensor) Pin Diagram</h2>
+<table>
+  <tr><th>Component</th><th>ESP8266 Pin</th></tr>
+  <tr><td>DHT11</td><td>D2</td></tr>
+  <tr><td>BMP180</td><td>I2C (SDA/SCL)</td></tr>
+  <tr><td>Rain Sensor</td><td>D7</td></tr>
+  <tr><td>Soil Sensor Analog</td><td>A0</td></tr>
+  <tr><td>Soil Sensor Power</td><td>D6</td></tr>
+  <tr><td>Servo Motor</td><td>D5</td></tr>
+</table>
+
+<h2>📌 ESP8266 #2 (Relay + Pump) Pin Diagram</h2>
+<table>
+  <tr><th>Component</th><th>ESP8266 Pin</th></tr>
+  <tr><td>Relay Module</td><td>D1</td></tr>
+</table>
+
+<h2>📄 Arduino Code Blocks</h2>
+<p>Use the copy button on the top right of each code block to copy the code easily.</p>
+
+<!-- Tabs for entering ESP IPs -->
+<h2>📶 Access Dashboards</h2>
+<div style="margin-bottom: 20px;">
+  <label for="esp32-ip">ESP32 Rover IP:</label>
+  <input id="esp32-ip" type="text" placeholder="e.g., 192.168.1.101">
+  <button onclick="goToESP32()">Open Rover Dashboard</button>
+</div>
+<div style="margin-bottom: 20px;">
+  <label for="esp8266-ip">ESP8266 Weather IP:</label>
+  <input id="esp8266-ip" type="text" placeholder="e.g., 192.168.1.102">
+  <button onclick="goToESP8266()">Open Weather Dashboard</button>
+</div>
+<script>
+function goToESP32() {
+  const ip = document.getElementById('esp32-ip').value;
+  if (ip) window.open(`http://${ip}`, '_blank');
+}
+function goToESP8266() {
+  const ip = document.getElementById('esp8266-ip').value;
+  if (ip) window.open(`http://${ip}`, '_blank');
+}
+</script>
+
+<h3>ESP32 Rover Code</h3>
+<div class="code-container"><button class="copy-btn">Copy</button><pre><code class="language-cpp">
+#include <WiFi.h>
+#include <WebServer.h>
+#include <Wire.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <TinyGPSPlus.h>
+#include <HardwareSerial.h>
+
+// Motor pins
+#define IN1 16
+#define IN2 17
+#define IN3 18
+#define IN4 19
+
+// Sensors
+#define trigPin 25
+#define echoPin 26
+#define irPin 27
+
+// WiFi Credentials
+const char* ssid = "Sudip";
+const char* password = "87654321";
+
+WebServer server(80);
+Adafruit_MPU6050 mpu;
+TinyGPSPlus gps;
+HardwareSerial neogps(1);
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(WiFi.localIP());
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(irPin, INPUT);
+
+  Wire.begin();
+  mpu.begin();
+  neogps.begin(9600, SERIAL_8N1, 34, 35);
+
+  // Web server routes and init
+  server.on("/", [](){ server.send(200, "text/plain", "ESP32 Rover Online"); });
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+  if (neogps.available()) gps.encode(neogps.read());
+}
+</code></pre></div>
+
+<h3>ESP8266 #1: Weather + Soil Sensor Code</h3>
+<div class="code-container"><button class="copy-btn">Copy</button><pre><code class="language-cpp">
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <DHT.h>
+#include <Wire.h>
+#include <Adafruit_BMP085.h>
+#include <Servo.h>
+
+#define DHTPIN D2
+#define DHTTYPE DHT11
+#define SOILPIN A0
+#define SOIL_PWR D6
+#define RAINPIN D7
+#define SERVOPIN D5
+
+DHT dht(DHTPIN, DHTTYPE);
+Adafruit_BMP085 bmp;
+Servo myservo;
+
+ESP8266WebServer server(80);
+const char* ssid = "Sudip";
+const char* password = "87654321";
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(SOIL_PWR, OUTPUT);
+  pinMode(RAINPIN, INPUT);
+  myservo.attach(SERVOPIN);
+  digitalWrite(SOIL_PWR, LOW);
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println(WiFi.localIP());
+
+  dht.begin();
+  bmp.begin();
+
+  server.on("/", [](){ server.send(200, "text/plain", "ESP8266 Weather Online"); });
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
+</code></pre></div>
+
+<h3>ESP8266 #2: Pump Relay Control Code</h3>
+<div class="code-container"><button class="copy-btn">Copy</button><pre><code class="language-cpp">
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+
+#define RELAY D1
+
+const char* ssid = "Sudip";
+const char* password = "87654321";
+ESP8266WebServer server(80);
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(RELAY, OUTPUT);
+  digitalWrite(RELAY, LOW);
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println(WiFi.localIP());
+
+  server.on("/on", [](){ digitalWrite(RELAY, HIGH); server.send(200, "text/plain", "Pump ON"); });
+  server.on("/off", [](){ digitalWrite(RELAY, LOW); server.send(200, "text/plain", "Pump OFF"); });
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
+</code></pre></div>
