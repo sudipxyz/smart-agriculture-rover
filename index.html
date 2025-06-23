@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Agriculture Rover</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #eaf6ff, #ffffff);
+      color: #333;
+    }
+    header {
+      background: #4caf50;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: #388e3c;
+    }
+    nav a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      display: block;
+      font-weight: bold;
+    }
+    nav a:hover {
+      background-color: #2e7d32;
+    }
+    section {
+      padding: 40px 20px;
+      max-width: 1100px;
+      margin: auto;
+      animation: fadeIn 1s ease-in-out;
+    }
+    h2 {
+      color: #388e3c;
+      border-left: 6px solid #81c784;
+      padding-left: 12px;
+    }
+    .module {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .module:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    }
+    ul, ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    footer {
+      background: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 1rem;
+      margin-top: 40px;
+    }
+    code {
+      background: #e0f2f1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      nav a {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Agriculture Rover</h1>
+    <p>Automated Field Monitoring and Irrigation System</p>
+  </header>
+
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#controllers">Controllers</a>
+    <a href="#sensors">Sensors</a>
+    <a href="#working">How It Works</a>
+    <a href="#access">Web Access</a>
+    <a href="#power">Power</a>
+  </nav>
+
+  <section id="overview">
+    <div class="module">
+      <h2>Project Overview</h2>
+      <p>This rover is designed for precision agriculture. It monitors environmental and soil conditions, avoids obstacles, and automatically irrigates the soil when moisture levels are low. The entire system is solar-powered and controlled wirelessly via web servers hosted on ESP32 and ESP8266 microcontrollers.</p>
+    </div>
+  </section>
+
+  <section id="controllers">
+    <div class="module">
+      <h2>Microcontrollers</h2>
+      <ul>
+        <li><strong>ESP32:</strong> Main brain of the rover. It controls motor movement, reads from MPU6050 for balance, processes GPS location, detects obstacles using ultrasonic and IR sensors, and hosts the main web interface.</li>
+        <li><strong>ESP8266 (Sensor Node):</strong> Collects environmental data (humidity, temperature, air pressure, rain, and soil moisture) and transmits it to the control node wirelessly.</li>
+        <li><strong>ESP8266 (Control Node):</strong> Receives soil data wirelessly and controls a water pump accordingly. Sends alerts about storm, rain, or humidity rise to farmers via the interface.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sensors">
+    <div class="module">
+      <h2>Sensors and Modules Details</h2>
+      <ul>
+        <li><strong>GPS Module:</strong> Provides real-time location of the rover for tracking and navigation.</li>
+        <li><strong>MPU6050:</strong> A 6-axis gyroscope and accelerometer used to maintain balance and orientation of the rover.</li>
+        <li><strong>Ultrasonic Sensor:</strong> Measures distance to obstacles in front to prevent collisions. Uses sound waves.</li>
+        <li><strong>IR Sensor:</strong> Detects obstacles behind the rover by sensing reflected infrared light.</li>
+        <li><strong>DHT11 Sensor:</strong> Measures ambient temperature and humidity. Used to monitor weather conditions.</li>
+        <li><strong>BMP180 Sensor:</strong> Measures barometric pressure. Helps in predicting weather changes like storms.</li>
+        <li><strong>Rain Sensor:</strong> Detects presence of rain. Triggers alerts to farmers.</li>
+        <li><strong>Soil Moisture Sensor:</strong> Detects water content in the soil. Triggers irrigation if moisture is below threshold.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="working">
+    <div class="module">
+      <h2>How It Works</h2>
+      <ol>
+        <li>The ESP32 controls the rover movement using high torque gear motors and avoids obstacles using ultrasonic (front) and IR (back) sensors.</li>
+        <li>MPU6050 ensures the rover stays balanced on uneven terrain.</li>
+        <li>The rover collects environmental data via DHT11, BMP180, and Rain sensor, processed by ESP8266 Sensor Node.</li>
+        <li>Soil moisture is also checked and transmitted to the ESP8266 Control Node.</li>
+        <li>If moisture is low, the control node activates the water pump wirelessly.</li>
+        <li>Web servers on ESP32/ESP8266 show sensor data and allow remote control.</li>
+        <li>System runs on 12V battery, charged via solar or adapter.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="access">
+    <div class="module">
+      <h2>Web Server Access</h2>
+      <ol>
+        <li>Connect your mobile/laptop to the Wi-Fi hotspot created by ESP32 or ESP8266.</li>
+        <li>Open your browser and enter the IP address shown in serial monitor (e.g., <code>192.168.4.1</code>).</li>
+        <li>Access live data, control the water pump, and monitor environmental changes in real time.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="power">
+    <div class="module">
+      <h2>Power Management</h2>
+      <p>The system runs on a 12V lithium battery. A solar panel is mounted for continuous power. Adapter charging is also available as backup.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Designed with ❤️ by Team SmartAgri</p>
+  </footer>
+</body>
+</html>
