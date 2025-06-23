@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Agriculture Rover</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to bottom right, #eaf6ff, #ffffff);
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    #login {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    #login input {
+      padding: 10px;
+      margin: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 250px;
+    }
+    #login button {
+      padding: 10px 20px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #login button:hover {
+      background: #388e3c;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      background: #00695c;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    nav a:hover {
+      transform: scale(1.1);
+      text-decoration: underline;
+    }
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 30px 0;
+      animation: slideUp 1s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .btn-link {
+      background: #388e3c;
+      color: white;
+      padding: 15px 25px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .btn-link:hover {
+      background: #2e7d32;
+      transform: scale(1.05);
+    }
+    .module {
+      padding: 20px;
+      margin: 20px;
+      background: #ffffffee;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #004d40;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div id="login">
+    <h2>Please Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="esp32ip" placeholder="ESP32 IP (e.g. 192.168.4.1)" />
+    <input type="text" id="esp8266ip" placeholder="ESP8266 IP (e.g. 192.168.4.2)" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="content" style="display:none">
+    <header>
+      <h1 style="text-align:center; margin-top: 20px;">Smart Agriculture Rover</h1>
+      <p style="text-align:center; font-size: 1.1rem;">Automated Field Monitoring and Irrigation System</p>
+    </header>
+
+    <nav>
+      <a href="#overview"><i class="fas fa-seedling"></i> Overview</a>
+      <a href="#controllers"><i class="fas fa-microchip"></i> Controllers</a>
+      <a href="#sensors"><i class="fas fa-thermometer-half"></i> Sensors</a>
+      <a href="#working"><i class="fas fa-cogs"></i> How It Works</a>
+      <a href="#access"><i class="fas fa-network-wired"></i> Web Access</a>
+      <a href="#power"><i class="fas fa-battery-full"></i> Power</a>
+    </nav>
+
+    <div class="btn-group">
+      <a class="btn-link" id="esp32btn" href="#" target="_blank"><i class="fas fa-car"></i> Rover Control (ESP32)</a>
+      <a class="btn-link" id="esp8266btn" href="#" target="_blank"><i class="fas fa-cloud-sun"></i> Weather & Soil (ESP8266)</a>
+    </div>
+
+    <!-- sections remain unchanged -->
+    <!-- ... -->
+
+    <footer>
+      <p>Designed with ❤️ by Team SmartAgri</p>
+    </footer>
+  </div>
+
+  <script>
+    function login() {
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const esp32 = document.getElementById('esp32ip').value;
+      const esp8266 = document.getElementById('esp8266ip').value;
+
+      if (user === 'SmartArgi' && pass === '87654321') {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+        if (esp32) document.getElementById('esp32btn').href = `http://${esp32}`;
+        if (esp8266) document.getElementById('esp8266btn').href = `http://${esp8266}`;
+      } else {
+        alert('Incorrect username or password!');
+      }
+    }
+  </script>
+</body>
+</html>
