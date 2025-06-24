@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroRover | IoT Smart Farming with Rover Automation</title>
+  <style>
+    /* Universal Box-Sizing for consistent layout across devices */
+    html {
+        box-sizing: border-box;
+    }
+    *, *::before, *::after {
+        box-sizing: inherit;
+    }
+
+    /* Keyframe Animations for modern UI feel */
+    @keyframes fadeInFromLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInFromRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes gradientBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }\
+      100% { background-position: 0% 50%; }
+    }
+
+    /* New animation for subtle element reveal */
+    @keyframes elementReveal {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Emoji animation for floating up and fading out */
+    @keyframes floatUpFadeOut {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-200px) scale(1.2); /* Float up further */
+        }
+    }
+
+    body {
+      background: linear-gradient(135deg, #0e0e0e, #1a1a1a, #0e0e0e); /* Smooth gradient for animated background */
+      background-size: 400% 400%; /* Larger size for gradient animation */
+      animation: gradientBackground 15s ease infinite; /* Looping background animation */
+      color: #f0f0f0;
+      font-family: 'Inter', sans-serif; /* Modern font for better readability */
+      margin: 0;
+      padding: 0; /* Ensures no default padding interferes with layout */
+      display: flex;
+      flex-direction: column; /* Allows content and footer to stack vertically */
+      justify-content: center; /* Centers content vertically */
+      align-items: center; /* Centers content horizontally */
+      min-height: 100vh; /* Takes full viewport height */
+      position: relative; /* Essential for absolute positioning of emoji container */
+    }
+
+    /* General Styling for headings and lists */
+    h1, h2, h3 {
+      color: #4fc3f7;
+      border-bottom: 2px solid #444;
+      padding-bottom: 4px;
+      animation: fadeInFromLeft 0.8s ease-out forwards; /* Left-side fade-in animation */
+    }
+    ul, ol {
+      background-color: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      animation: fadeInFromRight 0.8s ease-out forwards; /* Right-side fade-in animation */
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #444;
+    }
+    th {
+      background-color: #222;
+    }
+
+    /* Styling for form elements (inputs, textareas, buttons) */
+    input, textarea, button {
+      font-size: 16px;
+      margin: 8px 0; /* Consistent vertical spacing */
+      padding: 12px; /* Ample padding for touch targets */
+      border-radius: 8px; /* Rounded corners */
+      border: 1px solid #333; /* Subtle border */
+      transition: all 0.3s ease; /* Smooth transitions for hover/focus states */
+    }
+    input, textarea {
+      width: 100%;
+      background: #1c1c1c;
+      color: #eee;
+    }
+    input:focus, textarea:focus {
+        border-color: #4fc3f7; /* Highlight border on focus */
+        box-shadow: 0 0 8px rgba(79, 195, 247, 0.5); /* Glow effect on focus */
+        outline: none; /* Removes default outline */
+    }
+    button {
+      background-color: #4fc3f7;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(79, 195, 247, 0.2); /* Soft shadow */
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Hover animations */
+    }
+    button:hover {
+      background-color: #3ba8d7; /* Darker blue on hover */
+      transform: translateY(-3px); /* Lifts button on hover */
+      box-shadow: 0 6px 15px rgba(79, 195, 247, 0.4); /* More pronounced shadow on hover */
+    }
+
+    /* Page Layouts: Login and Main Content */
+    #login-page {
+      max-width: 450px; /* Max width for login card */
+      width: 90%; /* Responsive width for smaller screens */
+      margin: 0 auto; /* Centers the login card */
+      background: rgba(22, 22, 22, 0.85); /* Slightly transparent background */
+      backdrop-filter: blur(8px); /* Frosted glass effect */
+      padding: 30px; /* Increased padding inside the card */
+      border-radius: 16px; /* Highly rounded corners */
+      box-shadow: 0 10px 40px rgba(0, 255, 247, 0.2); /* Deep shadow */
+      animation: slideInUp 1s ease-out forwards; /* Card entrance animation */
+      z-index: 10; /* Ensures card is above background */
+      position: relative; /* Needed for z-index and emoji container */
+      overflow: hidden; /* Important for containing particles and other elements */
+    }
+    #main-content {
+        max-width: 900px;
+        width: 95%; /* Responsive width for dashboards */
+        margin: 20px auto; /* Margin to separate from top/bottom of viewport */
+        background: #161616;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+        animation: slideInUp 0.8s ease-out forwards; /* Restored simple slide-up animation */
+        display: none; /* Hidden by default, shown after login */
+        position: relative; /* Needed for canvas absolute positioning */
+        overflow: hidden; /* Important to contain canvas within its boundaries */
+    }
+
+    /* Code Block Styling */
+    .code-container {
+      position: relative;
+      margin-bottom: 20px;
+      background: #1e1e1e; /* Dark background for code container */
+      border-radius: 8px; /* Rounded corners */
+      padding: 10px; /* Inner padding */
+    }
+    pre code {
+      display: block;
+      overflow-x: auto; /* Enables horizontal scrolling for long lines of code */
+      white-space: pre;
+      background: #1e1e1e;
+      color: #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace; /* Monospaced font for code */
+    }
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 12px;
+      z-index: 1;
+      transition: background-color 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: #555;
+    }
+
+    /* IP Input Section Styling */
+    .ip-inputs {
+      padding: 15px;
+      background-color: #1a1a1a; /* Distinct background for input box */
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.05); /* Subtle shadow */
+    }
+    .ip-inputs label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #f0f0f0;
+    }
+
+    /* Generic Info Box Style */
+    .info-box {
+      background-color: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
+      animation: slideInUp 0.8s ease-out forwards;
+      animation-delay: 0.2s; /* Staggered animation for multiple boxes */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+    }
+    .info-box:hover {
+        transform: translateY(-5px); /* Lift effect on hover */
+        box-shadow: 0 15px 30px rgba(0, 255, 255, 0.15); /* More pronounced shadow */
+    }
+
+
+    /* Notification (Toast) Styling */
+    .notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Green for success */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        z-index: 1000; /* Ensures it's on top */
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    /* Feedback Sections Styling (simplified for new button) */
+    #feedback-section-login { /* Feedback section on login page */
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid #444;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Live Wallpaper Canvas for Dashboard */
+    #dashboard-background-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Puts it behind content */
+      opacity: 0.1; /* Subtle effect */
+      filter: blur(1px); /* Slight blur */
+    }
+
+    /* Live Wallpaper Canvas for Login Page */
+    #login-background-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2; /* Puts it behind the login card */
+      opacity: 0.05; /* Even more subtle for login */
+      filter: blur(0.5px); /* Very slight blur */
+    }
+
+    /* Specific animations for login page elements */
+    #login-page h2 { animation: elementReveal 0.6s ease-out 0s forwards; opacity: 0; }
+    #login-page #username { animation: elementReveal 0.6s ease-out 0.2s forwards; opacity: 0; }
+    #login-page #password { animation: elementReveal 0.6s ease-out 0.4s forwards; opacity: 0; }
+    #login-page button:not(#feedback-section-login button) { animation: elementReveal 0.6s ease-out 0.6s forwards; opacity: 0; }
+    #login-page #login-msg { animation: elementReveal 0.6s ease-out 0.7s forwards; opacity: 0;}
+
+    #feedback-section-login { opacity: 0; } /* Hide initially for staggered reveal */
+    #feedback-section-login.revealed {
+        animation: slideInUp 0.8s ease-out 0.8s forwards; /* Entire section slides up */
+    }
+    #feedback-section-login h3 { animation: elementReveal 0.6s ease-out 0.9s forwards; opacity: 0; }
+    #feedback-section-login p { animation: elementReveal 0.6s ease-out 1.0s forwards; opacity: 0; }
+    #feedback-section-login .feedback-actions button { animation: elementReveal 0.6s ease-out 1.1s forwards; opacity: 0; }
+
+    /* Footer style */
+    .main-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #f0f0f0;
+        font-size: 0.9em;
+        padding-bottom: 20px; /* Ensure space at the bottom */
+        position: relative; /* To contain emojis if they were direct children */
+        z-index: 10; /* Keep footer above emojis if needed */
+    }
+
+    /* Emoji container at the bottom */
+    #bottom-emoji-container {
+        position: absolute;
+        bottom: 0; /* Align to the very bottom of the body */
+        left: 0;
+        width: 100%;
+        height: 150px; /* Height for emojis to float within */
+        pointer-events: none; /* Allow clicks to pass through */
+        overflow: hidden; /* Hide emojis once they float out of this area */
+        z-index: 5; /* Ensures emojis are above background canvas but below footer */
+    }
+
+    .love-emoji {
+        position: absolute;
+        font-size: 2em; /* Large emoji size */
+        opacity: 0; /* Hidden initially */
+        animation: floatUpFadeOut 3s ease-out forwards; /* Animation duration */
+    }
+  </style>
+</head>
+<body>
+<!-- Main content continues below -->
+
+<div id="login-page">
+  <!-- Canvas for live wallpaper background on login page -->
+  <canvas id="login-background-canvas"></canvas>
+
+  <h2>🔐 AgroRover Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="handleLogin()">Login</button>
+  <p id="login-msg"></p>
+
+  <div id="feedback-section-login" class="info-box">
+    <h3>📝 Have Feedback?</h3>
+    <p>We'd love to hear from you! Click the button below to share your thoughts.</p>
+    <div class="feedback-actions" style="justify-content: flex-start;">
+      <button onclick="redirectToFeedback()">Raise Feedback</button>
+    </div>
+  </div>
+</div>
+
+<div id="main-content" style="display: none;">
+  <!-- Canvas for live wallpaper background on dashboard -->
+  <canvas id="dashboard-background-canvas"></canvas>
+
+  <h1>🌐 AgroRover | IoT Smart Farming with Rover Automation</h1>
+
+  <div class="info-box">
+    <h2>📘 Project Introduction</h2>
+    <p>This project integrates a Smart Rover and an IoT-based Weather & Irrigation System. The rover uses ESP32 with obstacle avoidance, GPS tracking, SLAM path visualization, and real-time MPU6050 graphing. The weather system, based on ESP8266, monitors temperature, humidity, air pressure, rainfall, and soil moisture, and controls a 12V pump wirelessly using another ESP8266 as a relay controller.</p>
+  </div>
+
+  <div class="info-box">
+    <h2>🔩 Component List</h2>
+    <ul>
+      <li>ESP32 (for Rover)</li>
+      <li>ESP8266 x2 (for Weather & Pump)</li>
+      <li>2 Gear Motors</li>
+      <li>L298N Motor Driver</li>
+      <li>MPU6050 Accelerometer/Gyroscope</li>
+      <li>Ultrasonic Sensor</li>
+      <li>IR Sensor</li>
+      <li>GPS NEO-7M Module</li>
+      <li>DHT11 Temperature & Humidity Sensor</li>
+      <li>BMP180 Pressure Sensor</li>
+      <li>Soil Moisture Sensor</li>
+      <li>Rain Sensor</li>
+      <li>Servo Motor (for soil sensor insertion)</li>
+      <li>Relay Module + 12V Water Pump</li>
+    </ul>
+  </div>
+
+  <div class="info-box">
+    <h2>📌 Pin Diagrams</h2>
+    <ul>
+      <li><strong>ESP32 Rover:</strong>
+        <ul>
+          <li>Motors → L298N (IN1-IN4 connected to GPIO 14, 27, 26, 25)</li>
+          <li>Ultrasonic Sensor → Trig: GPIO 18, Echo: GPIO 19</li>
+          <li>MPU6050 (I2C) → SDA: GPIO 21, SCL: GPIO 22</li>
+          <li>GPS NEO-7M → RX: GPIO 16, TX: GPIO 17 (via Serial2)</li>
+        </ul>
+      </li>
+      <li><strong>ESP8266 #1 (Weather & Soil):</strong>
+        <ul>
+          <li>DHT11 → D2</li>
+          <li>BMP180 (I2C) → SDA: D3, SCL: D4</li>
+          <li>Soil Moisture Sensor → A0</li>
+          <li>Rain Sensor → D6</li>
+          <li>Servo Motor → D5</li>
+        </ul>
+      </li>
+      <li><strong>ESP8266 #2 (Pump Control):</strong>
+        <ul>
+          <li>Relay Module IN → D1</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="ip-inputs">
+    <label for="esp32-ip">ESP32 Rover IP:</label>
+    <input id="esp32-ip" type="text" placeholder="e.g., 192.168.1.101">
+    <button onclick="goToESP32()">Open Rover Dashboard</button>
+
+    <label for="esp8266-ip">ESP8266 Weather IP:</label>
+    <input id="esp8266-ip" type="text" placeholder="e.g., 192.168.1.102">
+    <button onclick="goToESP8266()">Open Weather Dashboard</button>
+  </div>
+
+  <div class="info-box">
+    <h2>🚀 How to Upload the Code</h2>
+    <ol>
+      <li>Open the Arduino IDE and select the appropriate board from <strong>Tools &gt; Board</strong> (ESP32 Dev Module or NodeMCU 1.0 for ESP8266).</li>
+      <li>Install the necessary libraries from the Library Manager (e.g., <code>Adafruit_MPU6050</code>, <code>DHT sensor library</code>, <code>Adafruit BMP085</code>, <code>TinyGPSPlus</code>, etc.).</li>
+      <li>Copy the respective code from this site using the <strong>Copy</strong> button above each block.</li>
+      <li>Paste the code into Arduino IDE and connect your board via USB.</li>
+      <li>Select the correct <strong>Port</strong> from <strong>Tools &gt; Port</strong> and click the <strong>Upload</strong> button.</li>
+    </ol>
+  </div>
+
+  <div class="info-box">
+    <h2>🌐 How to Access Dashboards</h2>
+    <ol>
+      <li>Ensure all 3 boards are powered and connected to WiFi SSID <strong>Sudip</strong> with password <strong>87654321</strong>.</li>
+      <li>Open the <strong>Serial Monitor</strong> at <strong>115200 baud</strong> right after uploading the code.</li>
+      <li>Note the local IP address shown for each ESP module:
+        <ul>
+          <li>ESP32 → Rover Dashboard (Control Node)</li>
+          <li>ESP8266 #1 → Weather & Soil Monitoring (Sensor Node)</li>
+          <li>ESP8266 #2 → Water Pump Control (Relay Node)</li>
+        </ul>
+      </li>
+      <li>Enter the IP addresses in the dashboard section on this webpage to open each control panel.</li>
+    </ol>
+  </div>
+
+  <h2>📟 ESP32 Rover Full Code</h2>
+  <div class="code-container">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code id="esp32-code">// Full ESP32 Rover Code
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <Wire.h>
+#include <MPU6050.h>
+#include <TinyGPS++.h>
+#include <HardwareSerial.h>
+#include <ESP32Servo.h>  // ✅ Correct library for ESP32
+
+// WiFi credentials
+const char* ssid = "Sudip";
+const char* password = "87654321";
+
+// Pin definitions
+#define IN1 14
+#define IN2 27
+#define IN3 26
+#define IN4 25
+#define ENA 33
+#define ENB 32
+#define TRIG 5
+#define ECHO 18
+#define IR_BACK 19
+#define SERVO_PIN 4
+#define SDA_PIN 21
+#define SCL_PIN 22
+#define SPEED 180
+
+MPU6050 mpu;
+Servo servo;  // ✅ From ESP32Servo library
+TinyGPSPlus gps;
+HardwareSerial gpsSerial(1); // UART1
+AsyncWebServer server(80);
+AsyncWebSocket ws("/ws");
+
+// === Movement + Sensor Logic ===
+void forward() {
+  digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW);
+  analogWrite(ENA, SPEED); analogWrite(ENB, SPEED);
+}
+void backward() {
+  digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH);
+  analogWrite(ENA, SPEED); analogWrite(ENB, SPEED);
+}
+void left() {
+  digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW);
+}
+void right() {
+  digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH);
+}
+void stopMotors() {
+  digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
+}
+bool checkFall() {
+  int angle = abs(mpu.getAccelerationY()) / 16384.0 * 90;
+  return angle > 60;
+}
+long readUltrasonic() {
+  digitalWrite(TRIG, LOW); delayMicroseconds(2);
+  digitalWrite(TRIG, HIGH); delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+  return pulseIn(ECHO, HIGH) / 58;
+}
+void sendMPUData() {
+  int ax = mpu.getAccelerationX();
+  int ay = mpu.getAccelerationY();
+  int az = mpu.getAccelerationZ();
+  String msg = "MPU," + String(ax) + "," + String(ay) + "," + String(az);
+  ws.textAll(msg);
+}
+void sendGPSData() {
+  if (gps.location.isUpdated()) {
+    String gpsMsg = "GPS," + String(gps.location.lat(), 6) + "," + String(gps.location.lng(), 6);
+    ws.textAll(gpsMsg);
+  }
+}
+void sendFallAlert() {
+  ws.textAll("FALL,ALERT");
+}
+void handleCommand(String cmd) {
+  if (cmd == "F") forward();
+  else if (cmd == "B") backward();
+  else if (cmd == "L") left();
+  else if (cmd == "R") right();
+  else if (cmd == "S") stopMotors();
+}
+
+// === Setup ===
+void setup() {
+  Serial.begin(115200);
+  gpsSerial.begin(9600, SERIAL_8N1, 16, 17);
+  pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+  pinMode(ENA, OUTPUT); pinMode(ENB, OUTPUT);
+  pinMode(TRIG, OUTPUT); pinMode(ECHO, INPUT);
+  pinMode(IR_BACK, INPUT);
+  Wire.begin(SDA_PIN, SCL_PIN);
+  mpu.initialize();
+  servo.setPeriodHertz(50);  // for standard 50Hz servo
+  servo.attach(SERVO_PIN);
+  servo.write(90); // center
+
+  WiFi.softAP(ssid, password);
+  Serial.println("WiFi AP started");
+
+  ws.onEvent([](AsyncWebSocket *server, AsyncWebSocketClient *client,
+                AwsEventType type, void *arg, uint8_t *data, size_t len) {
+    if (type == WS_EVT_DATA) {
+      String msg = String((char*)data);
+      handleCommand(msg);
+    }
+  });
+
+  server.addHandler(&ws);
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    // The ESP32 will serve the dashboard HTML directly from its own web server
+    // This part is handled by the browser opening the IP address, not embedded here.
+    // The previous htmlPage String literal is removed from this code block.
+    request->send(200, "text/html", "ESP32 Rover Connected. Access dashboard via IP."); // Or send a simple message
+  });
+  server.begin();
+  Serial.println("Web server started");
+}
+
+// === Main Loop ===
+void loop() {
+  while (gpsSerial.available()) gps.encode(gpsSerial.read());
+  sendMPUData();
+  sendGPSData();
+  if (checkFall()) sendFallAlert();
+  delay(500);
+}</code></pre>
+  </div>
+
+  <h2>🌤️ ESP8266 #1 Sensor Node Code</h2>
+  <div class="code-container">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code id="esp8266-1-code">// ==== ESP8266 Sensor Unit Code (Wireless Pump Control + Manual Soil Sensor Control) ====
+// Components: DHT11, BMP180, Rain Sensor, Soil Moisture + Servo, Wireless Pump Command
+
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <Wire.h>
+#include <Adafruit_BMP085.h>
+#include <Servo.h>
+#include <DHT.h>
+
+// === WiFi Configuration ===
+const char* ssid = "Sudip";
+const char* password = "87654321";
+
+// Pump controller IP (ESP8266 #2)
+const char* pumpESP_IP = "192.168.4.2";  // static IP of pump ESP
+
+ESP8266WebServer server(80);
+
+// === Sensor Pins ===
+#define DHTPIN D2          // GPIO4
+#define DHTTYPE DHT11
+#define RAIN_PIN A0
+#define SOIL_PIN A0
+#define SERVO_PIN D5       // GPIO14
+#define SOIL_CONTROL_PIN D6 // Enable power to soil sensor
+
+// === Sensor Objects ===
+DHT dht(DHTPIN, DHTTYPE);
+Adafruit_BMP085 bmp;
+Servo servo;
+
+// === States ===
+bool autoPump = true;
+bool soilDryAlert = false;
+bool weatherAlert = false;
+bool soilInserted = false;
+int lastSoilValue = 0;
+
+// === Calibration Values ===
+int dryValue = 700;    // Adjust as needed
+int wetValue = 300;    // Adjust as needed
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.softAP(ssid, password);
+  Serial.println("[INFO] AP Started at 192.168.4.1");
+
+  dht.begin();
+  bmp.begin();
+  servo.attach(SERVO_PIN);
+  pinMode(SOIL_CONTROL_PIN, OUTPUT);
+  digitalWrite(SOIL_CONTROL_PIN, LOW);
+
+  setupWebServer();
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
+
+void setupWebServer() {
+  // Removed the dashboard HTML serving
+  server.on("/", []() {
+    server.send(200, "text/html", "ESP8266 Weather & Soil Sensor Connected. Access data via API.");
+  });
+
+  server.on("/data", []() {
+    float temp = dht.readTemperature();
+    float hum = dht.readHumidity();
+    int rain = analogRead(RAIN_PIN);
+    float pressure = bmp.readPressure() / 100.0;
+
+    int soil = lastSoilValue;
+
+    String json = "{";
+    json += "\"temp\":" + String(temp) + ",";
+    json += "\"hum\":" + String(hum) + ",";
+    json += "\"rain\":" + String(rain) + ",";
+    json += "\"pressure\":" + String(pressure) + ",";
+    json += "\"soil\":" + String(soil);
+    json += "}";
+
+    // Alert conditions
+    if (temp > 35 && hum > 70) weatherAlert = true;
+    else weatherAlert = false;
+
+    if (soilInserted && soil > dryValue) {
+      soilDryAlert = true;
+      if (autoPump) sendPumpCommand(true);
+    } else if (soilInserted && soil <= dryValue) {
+      soilDryAlert = false;
+      if (autoPump) sendPumpCommand(false);
+    }
+
+    server.send(200, "application/json", json);
+  });
+
+  server.on("/mode", HTTP_POST, []() {
+    if (server.hasArg("mode")) {
+      String mode = server.arg("mode");
+      autoPump = (mode == "auto");
+      server.send(200, "text/plain", "OK");
+    }
+  });
+
+  server.on("/pump", HTTP_POST, []() {
+    if (server.hasArg("state")) {
+      String state = server.arg("state");
+      sendPumpCommand(state == "on");
+      server.send(200, "text/plain", "Pump " + state);
+    }
+  });
+
+  server.on("/insert", []() {
+    insertSoilSensor();
+    server.send(200, "text/plain", "Soil sensor inserted and read");
+  });
+
+  server.on("/remove", []() {
+    removeSoilSensor();
+    server.send(200, "text/plain", "Soil sensor removed");
+  });
+}
+
+void insertSoilSensor() {
+  digitalWrite(SOIL_CONTROL_PIN, HIGH);
+  servo.write(0);
+  delay(1000);
+  lastSoilValue = analogRead(SOIL_PIN);
+  soilInserted = true;
+}
+
+void removeSoilSensor() {
+  servo.write(90);
+  delay(500);
+  digitalWrite(SOIL_CONTROL_PIN, LOW);
+  soilInserted = false;
+}
+
+void sendPumpCommand(bool on) {
+  WiFiClient client;
+  if (client.connect(pumpESP_IP, 80)) {
+    client.print(String("GET /relay?state=") + (on ? "on" : "off") + " HTTP/1.1\r\nHost: " + pumpESP_IP + "\r\nConnection: close\r\n\r\n");
+    delay(10);
+  }
+}
+// Removed dashboardHTML() function entirely
+</code></pre>
+  </div>
+
+  <h2>💧 ESP8266 #2 Pump Controller Code</h2>
+  <div class="code-container">
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre><code id="esp8266-2-code">// ==== ESP8266 Pump Controller Code (Receives Wireless Command from Sensor ESP) ====
+// Connects to same WiFi ("Sudip") and listens for relay ON/OFF commands
+
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+
+const char* ssid = "Sudip";
+const char* password = "87654321";
+
+ESP8266WebServer server(80);
+
+#define RELAY_PIN D1  // GPIO5 (IN of Relay Module)
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConnected to WiFi");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/relay", []() {
+    if (server.hasArg("state")) {
+      String state = server.arg("state");
+      if (state == "on") {
+        digitalWrite(RELAY_PIN, HIGH);
+        server.send(200, "text/plain", "Relay ON");
+      } else {
+        digitalWrite(RELAY_PIN, LOW);
+        server.send(200, "text/plain", "Relay OFF");
+      }
+    } else {
+      server.send(400, "text/plain", "Missing state param");
+    }
+  });
+
+  server.begin();
+  Serial.println("Pump Controller ready.");
+}
+
+void loop() {
+  server.handleClient();
+}</code></pre>
+  </div>
+
+  <!-- The feedback section for the dashboard is removed as per your request -->
+</div>
+
+<!-- Container for floating emojis at the bottom -->
+<div id="bottom-emoji-container"></div>
+
+<p class="main-footer">With ❤️, Team AgroRover 🌱</p>
+</body>
+<script>
+// Particle animation variables for Dashboard
+let dashboardCanvas, dashboardCtx, dashboardParticles;
+const DASHBOARD_PARTICLE_COUNT = 50; // Number of particles for dashboard
+
+// Particle animation variables for Login Page
+let loginCanvas, loginCtx, loginParticles;
+const LOGIN_PARTICLE_COUNT = 25; // Fewer particles for a subtle login page effect
+
+// Particle Class Definition (reused for both)
+class Particle {
+  constructor(canvasContext, x, y, radius, color, velocity) {
+    this.ctx = canvasContext;
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = { x: velocity.x, y: velocity.y };
+  }
+
+  draw() {
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+  }
+
+  update() {
+    // Reverse direction if hitting boundaries
+    if (this.x + this.radius > this.ctx.canvas.width || this.x - this.radius < 0) {
+      this.velocity.x = -this.velocity.x;
+    }
+    if (this.y + this.radius > this.ctx.canvas.height || this.y - this.radius < 0) {
+      this.velocity.y = -this.velocity.y;
+    }
+
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+
+    this.draw();
+  }
+}
+
+// Initialize particles for the dashboard background
+function initDashboardParticles() {
+  const mainContent = document.getElementById('main-content');
+  if (!mainContent) return;
+
+  dashboardCanvas = document.getElementById('dashboard-background-canvas');
+  dashboardCtx = dashboardCanvas.getContext('2d');
+
+  dashboardCanvas.width = mainContent.offsetWidth;
+  dashboardCanvas.height = mainContent.offsetHeight;
+
+  dashboardParticles = [];
+  const colors = ['#4fc3f7', '#66bb6a', '#ffeb3b', '#ef5350']; // Agro-themed colors
+
+  for (let i = 0; i < DASHBOARD_PARTICLE_COUNT; i++) {
+    const radius = Math.random() * 2 + 1; // Small particles
+    const x = Math.random() * (dashboardCanvas.width - radius * 2) + radius;
+    const y = Math.random() * (dashboardCanvas.height - radius * 2) + radius;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const velocity = {
+      x: (Math.random() - 0.5) * 0.5, // Slower movement
+      y: (Math.random() - 0.5) * 0.5
+    };
+    dashboardParticles.push(new Particle(dashboardCtx, x, y, radius, color, velocity));
+  }
+}
+
+// Animation loop for dashboard particles
+function animateDashboardParticles() {
+  if (!dashboardCtx) return;
+
+  requestAnimationFrame(animateDashboardParticles);
+  dashboardCtx.clearRect(0, 0, dashboardCanvas.width, dashboardCanvas.height);
+
+  dashboardParticles.forEach(particle => {
+    particle.update();
+  });
+}
+
+// Initialize particles for the login page background
+function initLoginParticles() {
+  const loginPage = document.getElementById('login-page');
+  if (!loginPage) return;
+
+  loginCanvas = document.getElementById('login-background-canvas');
+  loginCtx = loginCanvas.getContext('2d');
+
+  loginCanvas.width = loginPage.offsetWidth;
+  loginCanvas.height = loginPage.offsetHeight;
+
+  loginParticles = [];
+  const colors = ['#4fc3f7', '#f0f0f0', '#0e0e0e']; // Login-themed colors, subtle
+
+  for (let i = 0; i < LOGIN_PARTICLE_COUNT; i++) {
+    const radius = Math.random() * 1.5 + 0.5; // Even smaller particles
+    const x = Math.random() * (loginCanvas.width - radius * 2) + radius;
+    const y = Math.random() * (loginCanvas.height - radius * 2) + radius;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const velocity = {
+      x: (Math.random() - 0.5) * 0.2, // Very slow movement
+      y: (Math.random() - 0.5) * 0.2
+    };
+    loginParticles.push(new Particle(loginCtx, x, y, radius, color, velocity));
+  }
+}
+
+// Animation loop for login page particles
+function animateLoginParticles() {
+  if (!loginCtx) return;
+
+  requestAnimationFrame(animateLoginParticles);
+  loginCtx.clearRect(0, 0, loginCanvas.width, loginCanvas.height);
+
+  loginParticles.forEach(particle => {
+    particle.update();
+  });
+}
+
+// Handle canvas resizing for both
+function resizeCanvases() {
+  const mainContent = document.getElementById('main-content');
+  const loginPage = document.getElementById('login-page');
+
+  if (dashboardCanvas && mainContent.style.display !== 'none') {
+    dashboardCanvas.width = mainContent.offsetWidth;
+    dashboardCanvas.height = mainContent.offsetHeight;
+    initDashboardParticles(); // Re-initialize to fill new size
+  }
+
+  if (loginCanvas && loginPage.style.display !== 'none') {
+    loginCanvas.width = loginPage.offsetWidth;
+    loginCanvas.height = loginPage.offsetHeight;
+    initLoginParticles(); // Re-initialize to fill new size
+  }
+}
+
+// Function to generate and animate a single emoji
+function createFloatingEmoji() {
+    const emojiContainer = document.getElementById('bottom-emoji-container');
+    if (!emojiContainer) return;
+
+    const emojis = ['❤️', '💖', '✨', '😊', '👍']; // Array of emojis
+    const emoji = document.createElement('span');
+    emoji.classList.add('love-emoji');
+    emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+    // Position the emoji randomly across the container's width
+    const containerWidth = emojiContainer.offsetWidth;
+    const emojiSizeApprox = 32; // Approximate size of 2em emoji
+    const leftPosition = Math.random() * (containerWidth - emojiSizeApprox);
+    emoji.style.left = `${leftPosition}px`;
+    emoji.style.bottom = `${Math.random() * 20}px`; // Start slightly above the bottom of the container
+
+    // Randomize animation delay and duration for a more natural look
+    emoji.style.animationDelay = `${Math.random() * 0.5}s`;
+    emoji.style.animationDuration = `${2.5 + Math.random() * 1}s`;
+
+    emojiContainer.appendChild(emoji);
+
+    // Remove emoji after its animation completes to prevent DOM buildup
+    emoji.addEventListener('animationend', () => {
+        emoji.remove();
+    });
+}
+
+// Function to start a continuous flow of emojis
+let emojiInterval;
+function startEmojiFlow() {
+    // Clear any existing interval to prevent duplicates
+    if (emojiInterval) {
+        clearInterval(emojiInterval);
+    }
+    // Generate an emoji every 500ms
+    emojiInterval = setInterval(createFloatingEmoji, 500);
+}
+
+// New function to redirect to Typeform for feedback
+function redirectToFeedback() {
+    window.open('https://form.typeform.com/to/F0Mk2AC3', '_blank');
+}
+
+// --- Existing JavaScript Functions (modified to remove old feedback logic) ---
+
+function handleLogin() {
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  const mainContent = document.getElementById('main-content');
+
+  if (u === "Rover" && p === "87654321") {
+    // Hide login page instantly
+    document.getElementById('login-page').style.display = 'none';
+    // Show main content with animation
+    mainContent.style.display = 'block';
+    mainContent.style.animation = 'slideInUp 0.8s ease-out forwards'; // Re-apply slideInUp directly
+
+    // Initialize and start dashboard particle animation when dashboard is shown
+    initDashboardParticles();
+    animateDashboardParticles();
+    // Stop login page particle animation
+    if (loginCtx) {
+        cancelAnimationFrame(animateLoginParticles);
+    }
+    // Add event listener for resizing only once
+    window.removeEventListener('resize', resizeCanvases); // Remove previous to avoid duplicates
+    window.addEventListener('resize', resizeCanvases);
+
+  } else {
+    document.getElementById('login-msg').innerText = "❌ Incorrect username or password.";
+  }
+}
+
+function goToESP32() {
+  const ip = document.getElementById('esp32-ip').value;
+  if (ip) window.open(`http://${ip}`, '_blank');
+}
+
+function goToESP8266() {
+  const ip = document.getElementById('esp8266-ip').value;
+  if (ip) window.open(`http://${ip}`, '_blank');
+}
+
+window.onload = function() {
+  // On initial load, only the login page is visible.
+  document.getElementById('login-page').style.display = 'block';
+  document.getElementById('main-content').style.display = 'none';
+  // Initialize and start login page particle animation
+  initLoginParticles();
+  animateLoginParticles();
+  // Trigger feedback section reveal for staggered animations
+  document.getElementById('feedback-section-login').classList.add('revealed');
+  // Add event listener for resizing on load for login page
+  window.addEventListener('resize', resizeCanvases);
+
+  // Start the continuous emoji flow on page load
+  startEmojiFlow();
+};
+
+function copyCode(btn) {
+  const code = btn.nextElementSibling.innerText;
+  // Using execCommand for better iframe compatibility, as navigator.clipboard.writeText might be restricted.
+  const textarea = document.createElement('textarea');
+  textarea.value = code;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+
+  btn.innerText = 'Copied!';
+  setTimeout(() => btn.innerText = 'Copy', 2000);
+}
+
+function showNotification(message, type = 'green') {
+    const notificationDiv = document.createElement('div');
+    notificationDiv.classList.add('notification');
+    notificationDiv.style.backgroundColor = type === 'red' ? '#dc3545' : '#4CAF50';
+    notificationDiv.innerText = message;
+    document.body.appendChild(notificationDiv);
+
+    setTimeout(() => {
+        notificationDiv.style.opacity = '1';
+    }, 10);
+
+    setTimeout(() => {
+        notificationDiv.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(notificationDiv);
+        }, 500);
+    }, 3000);
+}
+
+function confirmCustom(message) {
+    // For this environment, using window.confirm as per previous discussions for interactivity.
+    // In a real application, you would implement a visible custom modal and wait for user interaction.
+    return window.confirm(message);
+}
+</script>
+</html>
